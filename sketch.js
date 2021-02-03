@@ -1,13 +1,15 @@
 var ball;
-var database;
-var position;
+var database
+var playercount =0
+var gamestate = 0 
+var position
 function setup(){
     createCanvas(500,500);
     ball = createSprite(250,250,10,10);
     ball.shapeColor = "red";
-    database = firebase.database();
-    var ballpositionref = database.ref('ball/position')
-    ballpositionref.on('value',readposition,se)
+    database = firebase.database()
+    var ballpointref = database.ref('ball/position')
+    ballpointref.on('value',readposition)
 }
 
 function draw(){
@@ -26,18 +28,15 @@ function draw(){
     }
     drawSprites();
 }
-
-function changePosition(x,y){
-        database.ref('ball/position').set({
-        'xpos':position.xpos+x,
-        'ypos':position.ypos+y
-    });
+changePosition = function(x,y){
+database.ref('ball/position').set({
+    'xpos':ball.x+=x,
+    'ypos':ball.y+=y
+})
 }
-function readposition(data){
-    position = data.val();
+readposition = function(data){
+    position = data.val()
     ball.x = position.xpos
     ball.y = position.ypos
 }
- function se(){
-     console.log('error in connecting to the database')
- }
+
